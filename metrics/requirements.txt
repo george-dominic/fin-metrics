@@ -1,0 +1,5 @@
+pandas
+mage-ai
+google-cloud-bigquery
+openbb
+numpy
