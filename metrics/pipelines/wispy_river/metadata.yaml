@@ -3,7 +3,8 @@ blocks:
   color: null
   configuration:
     file_path: null
-  downstream_blocks: []
+  downstream_blocks:
+  - young_wave
   executor_config: null
   executor_type: local_python
   has_callback: false
@@ -13,6 +14,20 @@ blocks:
   type: data_loader
   upstream_blocks: []
   uuid: broken_waterfall
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: young wave
+  status: executed
+  type: data_exporter
+  upstream_blocks:
+  - broken_waterfall
+  uuid: young_wave
 data_integration: null
 name: wispy river
 type: python
