@@ -1,21 +1,33 @@
 from openbb_terminal.sdk import openbb
 import pandas as pd
+import os
 
 if 'data_loader' not in globals():
     from mage_ai.data_preparation.decorators import data_loader
 if 'test' not in globals():
     from mage_ai.data_preparation.decorators import test
 
+
+
 def get_ticker_list():
 
-    # read the wikipedia page that lists the current S&P 500 constituents
-    url = 'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies'
-    table = pd.read_html(url, header=0)[0]
+    # specify the relative or absolute path of the file
+    file_path = 'tickers.csv'
+    # get the absolute path of the file
+    absolute_path = os.path.abspath(file_path)
+    df = pd.read_csv(absolute_path)
+    return df['Symbol'].to_list()
 
-    # extract the ticker symbol column
-    tickers = table['Symbol'].tolist()
+# def get_ticker_list():
 
-    return tickers
+#     # read the wikipedia page that lists the current S&P 500 constituents
+#     url = 'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies'
+#     table = pd.read_html(url, header=0)[0]
+
+#     # extract the ticker symbol column
+#     tickers = table['Symbol'].tolist()
+
+#     return tickers
 
 @data_loader
 def get_ratio_growth_stocks():
@@ -33,7 +45,7 @@ def get_ratio_growth_stocks():
             break
     return pd.concat(lst_stock_df)
 
-print(get_ratio_growth_stocks())
+# print(get_ratio_growth_stocks())
 
 @test
 def test_output(output, *args) -> None:
