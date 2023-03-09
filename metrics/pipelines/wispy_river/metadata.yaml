@@ -3,18 +3,54 @@ blocks:
   color: null
   configuration:
     file_path: null
+  downstream_blocks:
+  - export_to_big_query
+  - missing_values_for_broken_waterfall
+  - missing_values_for_broken_waterfall
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: financial metric load
+  status: executed
+  type: data_loader
+  upstream_blocks: []
+  uuid: financial_metric_load
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
   downstream_blocks: []
   executor_config: null
   executor_type: local_python
   has_callback: false
   language: python
-  name: broken_waterfall
-  status: executed
-  type: data_loader
-  upstream_blocks: []
-  uuid: broken_waterfall
+  name: export to big query
+  status: failed
+  type: data_exporter
+  upstream_blocks:
+  - financial_metric_load
+  uuid: export_to_big_query
 data_integration: null
 name: wispy river
 type: python
 uuid: wispy_river
-widgets: []
+widgets:
+- all_upstream_blocks_executed: true
+  color: null
+  configuration:
+    chart_style: horizontal
+    chart_type: bar chart
+    x: columns_with_mising_values
+    y: percentage_of_missing_values
+    y_sort_order: descending
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: missing values for broken_waterfall
+  status: executed
+  type: chart
+  upstream_blocks:
+  - financial_metric_load
+  uuid: missing_values_for_broken_waterfall
