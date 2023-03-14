@@ -12,11 +12,11 @@ blocks:
   has_callback: false
   language: python
   name: financial metric load
-  status: executed
+  status: updated
   type: data_loader
   upstream_blocks: []
   uuid: financial_metric_load
-- all_upstream_blocks_executed: true
+- all_upstream_blocks_executed: false
   color: null
   configuration: {}
   downstream_blocks: []
@@ -25,17 +25,18 @@ blocks:
   has_callback: false
   language: python
   name: export to big query
-  status: failed
+  status: executed
   type: data_exporter
   upstream_blocks:
   - financial_metric_load
   uuid: export_to_big_query
 data_integration: null
+extensions: {}
 name: wispy river
 type: python
 uuid: wispy_river
 widgets:
-- all_upstream_blocks_executed: true
+- all_upstream_blocks_executed: false
   color: null
   configuration:
     chart_style: horizontal
@@ -49,7 +50,7 @@ widgets:
   has_callback: false
   language: python
   name: missing values for broken_waterfall
-  status: executed
+  status: failed
   type: chart
   upstream_blocks:
   - financial_metric_load

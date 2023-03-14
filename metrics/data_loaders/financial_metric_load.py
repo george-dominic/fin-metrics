@@ -9,14 +9,15 @@ if 'test' not in globals():
     from mage_ai.data_preparation.decorators import test
 
 
-def get_ticker_list():
+def get_ticker_list(counter):
 
     # specify the relative or absolute path of the file
     file_path = 'tickers.csv'
     # get the absolute path of the file
     absolute_path = os.path.abspath(file_path)
     df = pd.read_csv(absolute_path)
-    return df['Symbol'].to_list()
+    ticker = df['Symbol'].loc[counter:]
+    return ticker.to_list()
 
 def get_pct_change_ticker(ticker):
 
@@ -35,11 +36,23 @@ def get_pct_change_ticker(ticker):
 
 @data_loader
 def get_ratio_growth_stocks():
+    api_limit = 10
+    counter = 0
+    run_count = 0
 
-    count = 0
+    if os.path.exists('last_processed_counter.txt'):
+        with open('last_processed_counter.txt', 'r') as f:
+            counter = int(f.read().strip())
+
+
     lst_stock_df = []
-    for tick in get_ticker_list():
+    # obb = openbb.stocks.fa.growth()
+    
+    for tick in get_ticker_list(counter):
         df_growth_ratio = openbb.stocks.fa.growth(tick, limit=20)
+        # if len(df_growth_ratio) != 20:
+        #     print(f"Skipping {tick} due to unexpected data length")
+        #     continue
         df_growth_ratio = df_growth_ratio.T.drop('Period', axis=1)
         df_growth_ratio['Year'] = df_growth_ratio.index
         df_growth_ratio = df_growth_ratio.reset_index(drop=True)
@@ -47,11 +60,18 @@ def get_ratio_growth_stocks():
         df_growth_ratio['Ticker'] = [
             tick for i in range(0, len(df_growth_ratio.index))]
         lst_stock_df.append(df_growth_ratio)
-        count += 1
-        if count == 3:
+        counter += 1
+        run_count += 1
+        
+        if run_count == api_limit-1:
+            with open('last_processed_counter.txt', 'w') as f:
+                f.write(str(counter))
+            print("Closing API limit, Successful Run")
             break
+                       
     return pd.concat(lst_stock_df)
-
+    
+    
 @test
 def test_output(output, *args) -> None:
     """
