@@ -79,10 +79,11 @@ def get_ratio_growth_stocks() -> pd.DataFrame:
     Returns:
         A DataFrame containing the growth ratios and stock returns for the tickers.
     """
-    api_limit = 10
+    api_limit = 200
     counter = 0
     run_count = 0
 
+    #checking if last processed counter exists, if yes it picks it up
     if os.path.exists('last_processed_counter.txt'):
         with open('last_processed_counter.txt', 'r') as f:
             counter = int(f.read().strip())
@@ -103,7 +104,8 @@ def get_ratio_growth_stocks() -> pd.DataFrame:
         counter += 1
         run_count += 1
 
-        if run_count == api_limit-1:
+        if run_count == api_limit:
+            #writing counter with the last run to resume run from there
             with open('last_processed_counter.txt', 'w') as f:
                 f.write(str(counter))
             print("Closing API limit, Successful Run")
