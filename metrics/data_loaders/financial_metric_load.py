@@ -81,7 +81,7 @@ def get_ratio_growth_stocks() -> pd.DataFrame:
     Returns:
         A DataFrame containing the growth ratios and stock returns for the tickers.
     """
-    api_limit = 200
+    api_limit = 50
     counter = 0
     run_count = 0
 
