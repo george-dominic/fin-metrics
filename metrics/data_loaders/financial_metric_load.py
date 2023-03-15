@@ -3,6 +3,8 @@ import os
 from typing import List
 import pandas as pd
 import yfinance as yf
+import time
+import random
 
 if 'data_loader' not in globals():
     from mage_ai.data_preparation.decorators import data_loader
@@ -91,6 +93,7 @@ def get_ratio_growth_stocks() -> pd.DataFrame:
     lst_stock_df = []
 
     for ticker in read_ticker_list()[counter:]:
+        time.sleep(2 + 0.5 * random.random())
         df_growth_ratio = get_growth_ratios(ticker, 20)
         if df_growth_ratio.empty:
             continue
