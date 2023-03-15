@@ -41,8 +41,13 @@ def get_stock_returns(ticker: str, years: int) -> List[float]:
     if stock_data is None:
         print(f"Error: Could not retrieve data for {ticker}.")
         return []
-    yearly_prices = stock_data["Adj Close"].resample("Y").last().ffill()
-    yearly_returns = yearly_prices.pct_change().fillna(0)[1:]
+    yearly_prices = stock_data["Adj Close"].resample("Y").last()
+    year_range = pd.date_range(start=start_date, end=end_date, freq='Y')
+    yearly_prices = yearly_prices.reindex(year_range)
+    yearly_prices = yearly_prices.ffill()
+    yearly_returns = yearly_prices.pct_change().fillna(0)
+    yearly_returns.drop(yearly_returns.index[0], inplace=True)
+
     return yearly_returns.tolist()[-years:]
 
 def get_growth_ratios(ticker: str, years: int) -> pd.DataFrame:
@@ -57,13 +62,13 @@ def get_growth_ratios(ticker: str, years: int) -> pd.DataFrame:
         A DataFrame containing the growth ratios for the stock.
     """
     df = openbb.stocks.fa.growth(ticker, limit=years)
-    if len(df) < 5:
+    if df.shape[0] < 5:
         print(f"Skipping {ticker} due to insufficient data")
         return pd.DataFrame()
     df = df.T.drop('Period', axis=1)
     df['Year'] = df.index
     df = df.reset_index(drop=True)
-    df['Ticker'] = [ticker for i in range(0, len(df))]
+    df['Ticker'] = [ticker for i in range(0, df.shape[0])]
     return df
 
 @data_loader
@@ -88,7 +93,7 @@ def get_ratio_growth_stocks() -> pd.DataFrame:
         df_growth_ratio = get_growth_ratios(ticker, 20)
         if df_growth_ratio.empty:
             continue
-        stock_returns = get_stock_returns(ticker, len(df_growth_ratio))
+        stock_returns = get_stock_returns(ticker, df_growth_ratio.shape[0])
         if not stock_returns:
             print(f"Insufficient data for {ticker} to calculate percent change")
             continue
