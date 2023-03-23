@@ -3,6 +3,8 @@ import os
 from typing import List
 import pandas as pd
 import yfinance as yf
+import random
+import time
 
 if 'data_loader' not in globals():
     from mage_ai.data_preparation.decorators import data_loader
@@ -41,6 +43,8 @@ def get_stock_returns(ticker: str, years: int) -> List[float]:
     if stock_data is None:
         print(f"Error: Could not retrieve data for {ticker}.")
         return []
+    
+    stock_data.index = pd.to_datetime(stock_data.index) # convert index to DateTimeIndex
     yearly_prices = stock_data["Adj Close"].resample("Y").last()
     year_range = pd.date_range(start=start_date, end=end_date, freq='Y')
     yearly_prices = yearly_prices.reindex(year_range)
@@ -91,6 +95,7 @@ def get_ratio_growth_stocks() -> pd.DataFrame:
     lst_stock_df = []
 
     for ticker in read_ticker_list()[counter:]:
+        time.sleep(2 + 0.5 * random.random())
         df_growth_ratio = get_growth_ratios(ticker, 20)
         if df_growth_ratio.empty:
             continue
