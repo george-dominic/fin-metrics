@@ -1,0 +1,82 @@
+blocks:
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks:
+  - data_cleaned
+  - ticker_sector
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: load_bq
+  status: updated
+  type: data_loader
+  upstream_blocks: []
+  uuid: load_bq
+- all_upstream_blocks_executed: false
+  color: null
+  configuration: {}
+  downstream_blocks:
+  - final_transform
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: ticker_sector
+  status: executed
+  type: transformer
+  upstream_blocks:
+  - load_bq
+  uuid: ticker_sector
+- all_upstream_blocks_executed: false
+  color: null
+  configuration: {}
+  downstream_blocks:
+  - final_transform
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: data_cleaned
+  status: executed
+  type: transformer
+  upstream_blocks:
+  - load_bq
+  uuid: data_cleaned
+- all_upstream_blocks_executed: false
+  color: null
+  configuration: {}
+  downstream_blocks:
+  - export_bq
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: final_transform
+  status: executed
+  type: transformer
+  upstream_blocks:
+  - data_cleaned
+  - ticker_sector
+  uuid: final_transform
+- all_upstream_blocks_executed: false
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: export_bq
+  status: executed
+  type: data_exporter
+  upstream_blocks:
+  - final_transform
+  uuid: export_bq
+data_integration: null
+extensions: {}
+name: green pine
+type: python
+uuid: green_pine
+widgets: []
