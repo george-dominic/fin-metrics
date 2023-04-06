@@ -3,3 +3,6 @@ mage-ai
 google-cloud-bigquery
 openbb
 numpy
+lightgbm
+scikit-learn
+xgboost
