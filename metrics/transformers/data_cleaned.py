@@ -6,6 +6,7 @@ from sklearn.preprocessing import PowerTransformer
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
 import numpy as np
+import os
 
 def handle_k_m(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -21,7 +22,7 @@ def handle_k_m(df: pd.DataFrame) -> pd.DataFrame:
         A new pandas DataFrame with the same columns as the input DataFrame, but with any string values that end with "K" 
         or "M" converted to floats where appropriate.
     """
-    ticker_drop = df.drop('Ticker',axis = 1)
+    ticker_drop = df.drop("Ticker",axis = 1)
     temp = {}
     for key, value in ticker_drop.items():
         lst = []
@@ -131,6 +132,22 @@ def handle_outliers(df: pd.DataFrame) -> pd.DataFrame:
     # Concatenate the Winsorized columns with the last column
     return pd.concat([data_winsorized, df.iloc[:, -1]], axis=1)
 
+def add_sectors(df:pd.DataFrame, df_raw:pd.DataFrame) -> pd.DataFrame:
+    """
+    Add a 'Sector' column to the given DataFrame by mapping Ticker symbols to their respective sectors from a CSV file.
+
+    Args:
+        df (pandas.DataFrame): The DataFrame to which the 'Sector' column needs to be added.
+
+    Returns:
+        pandas.DataFrame: A new DataFrame with the 'Sector' column added.
+    """
+    file_path = 'tickers.csv'
+    absolute_path = os.path.abspath(file_path)
+    df_sector = pd.read_csv(absolute_path)
+    sector_dic = df_sector.set_index('Symbol')['Sector']
+    df.insert(len(df.columns)-1, 'Sector', df_raw['Ticker'].map(sector_dic).fillna('others'))
+    return df
 
 @transformer
 def transform(df: pd.DataFrame, *args, **kwargs) -> pd.DataFrame:
@@ -143,23 +160,27 @@ def transform(df: pd.DataFrame, *args, **kwargs) -> pd.DataFrame:
     Returns:
         A new pandas DataFrame containing the preprocessed data.
     """
+    # df_raw = df
     # Step 1: Handle values with "K" and "M" characters
-    df = handle_k_m(df)
+    df1 = handle_k_m(df)
 
     # Step 2: Remove columns with high percentage of zeros
-    df = remove_col(df)
+    df2 = remove_col(df1)
 
     # Step 3: Handle skewness with Yeo-Johnson power transform
-    df = handle_skew(df)
+    df3 = handle_skew(df2)
 
     # Step 4: Standardize the data
-    df = standardize_data(df)
+    df4 = standardize_data(df3)
 
     # Step 5: Handle outliers with Winsorization
-    df = handle_outliers(df)
+    df5 = handle_outliers(df4)
+
+    # Step 6: Add Sectors against the tickers
+    df6 = add_sectors(df5,df)
 
     # Return the transformed DataFrame
-    return df
+    return df6
 
 
 
