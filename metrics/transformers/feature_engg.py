@@ -5,7 +5,6 @@ if 'test' not in globals():
 from sklearn.preprocessing import LabelEncoder
 import pandas as pd
 from sklearn.preprocessing import PolynomialFeatures
-# import lightgbm as lgb
 from sklearn.feature_selection import SelectKBest, f_regression
 import xgboost as xgb
 from sklearn.ensemble import RandomForestRegressor
@@ -34,7 +33,7 @@ def target_encoding(df: pd.DataFrame, column, target) -> pd.DataFrame:
     return df
 
 
-def feature_creation(df: pd.DataFrame) -> pd.DataFrame:
+def ratio_features(df: pd.DataFrame) -> pd.DataFrame:
     """
     Creates new features from the input DataFrame.
 
@@ -150,40 +149,6 @@ def call_poly(df: pd.DataFrame) -> pd.DataFrame:
 
     return poly_df
 
-
-# def perform_feature_selection(df, target_col, num_features_to_select):
-#     """
-#     Performs feature selection using LightGBM's built-in feature importance calculation.
-
-#     Args:
-#     df (pandas.DataFrame): The input DataFrame containing the features and the target column.
-#     target_col (str): The name of the target column in the input DataFrame.
-#     num_features_to_select (int): The number of features to select.
-
-#     Returns:
-#     list of str: The names of the selected features.
-#     """
-
-#     # Split the input DataFrame into features and target
-#     X = df.drop(columns=[target_col])
-#     y = df[target_col]
-
-#     # Create a LightGBM dataset from the input features and target
-#     lgb_dataset = lgb.Dataset(X, label=y)
-
-#     # Train a LightGBM model and get feature importance scores
-#     params = {'objective': 'regression', 'metric': 'mse'}
-#     model = lgb.train(params, lgb_dataset)
-#     feature_importance = model.feature_importance(importance_type='gain')
-
-#     # Sort the feature importance scores in descending order and get the top k features
-#     sorted_indices = feature_importance.argsort()[::-1]
-#     selected_feature_indices = sorted_indices[:num_features_to_select]
-
-#     # Get the names of the selected features
-#     selected_features = list(X.columns[selected_feature_indices])
-
-#     return selected_features
 
 def select_features_rf(df, target_column, n_features):
     """
@@ -316,18 +281,16 @@ def transform(df: pd.DataFrame, *args, **kwargs) -> pd.DataFrame:
     data_encoded = target_encoding(df, 'Sector', 'Stock_Percent_Change')
 
     # Create new features using the encoded DataFrame
-    new_features = feature_creation(data_encoded)
+    new_ratio_features = ratio_features(data_encoded)
 
     #Adding new sector columns based on their mean and stdev
-    sector_transform = sector_transformation(new_features)
+    sector_transform = sector_transformation(new_ratio_features)
 
     # Add the original 'Stock_Percent_Change' feature back to the DataFrame
     new_poly_features = call_poly(sector_transform)
 
     #stock percent added back
     df_fin_metric = pd.concat([new_poly_features, data_encoded['Stock_Percent_Change']], axis=1)
-
-    # lightgbm_feature = perform_feature_selection(df_fin_metric, 'Stock_Percent_Change', 40)
     
     # Select top features using different methods and store them in separate lists
     rf_features = select_features_rf(df_fin_metric, 'Stock_Percent_Change', 40)

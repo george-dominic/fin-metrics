@@ -24,12 +24,12 @@ blocks:
   has_callback: false
   language: python
   name: data_cleaned
-  status: executed
+  status: updated
   type: transformer
   upstream_blocks:
   - load_bq
   uuid: data_cleaned
-- all_upstream_blocks_executed: true
+- all_upstream_blocks_executed: false
   color: null
   configuration: {}
   downstream_blocks:
@@ -39,12 +39,12 @@ blocks:
   has_callback: false
   language: python
   name: feature_engg
-  status: executed
+  status: updated
   type: transformer
   upstream_blocks:
   - data_cleaned
   uuid: feature_engg
-- all_upstream_blocks_executed: true
+- all_upstream_blocks_executed: false
   color: null
   configuration: {}
   downstream_blocks: []
@@ -58,7 +58,7 @@ blocks:
   upstream_blocks:
   - feature_engg
   uuid: export_bq_2
-- all_upstream_blocks_executed: true
+- all_upstream_blocks_executed: false
   color: null
   configuration: {}
   downstream_blocks: []
@@ -77,6 +77,6 @@ description: null
 extensions: {}
 name: green pine
 type: python
-updated_at: '2023-04-06 16:12:23'
+updated_at: '2023-04-07 11:45:16'
 uuid: green_pine
 widgets: []

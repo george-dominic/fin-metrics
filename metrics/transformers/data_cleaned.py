@@ -41,7 +41,7 @@ def handle_k_m(df: pd.DataFrame) -> pd.DataFrame:
 
 def remove_col(df: pd.DataFrame) -> pd.DataFrame:
     """
-    This function takes a DataFrame as input and drops columns due to huge percentage of zeros
+    This function takes a DataFrame as input and drops columns due to huge percentage of zeros, coorelation and irrelevant data
 
     Args:
         df: A pandas DataFrame containing data to be transformed.
