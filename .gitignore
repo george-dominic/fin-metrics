@@ -67,3 +67,4 @@ mage_data/
 secrets/
 .file_versions/
 metrics/fin-key-metrics-7a6d45087127.json
+.ipynb_checkpoints/

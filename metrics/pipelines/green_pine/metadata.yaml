@@ -1,0 +1,65 @@
+blocks:
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks:
+  - data_cleaned
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: load_bq
+  status: executed
+  type: data_loader
+  upstream_blocks: []
+  uuid: load_bq
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks:
+  - feature_engg
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: data_cleaned
+  status: executed
+  type: transformer
+  upstream_blocks:
+  - load_bq
+  uuid: data_cleaned
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: feature_engg
+  status: updated
+  type: transformer
+  upstream_blocks:
+  - data_cleaned
+  uuid: feature_engg
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: export_bq
+  status: executed
+  type: data_exporter
+  upstream_blocks: []
+  uuid: export_bq
+data_integration: null
+description: null
+extensions: {}
+name: green pine
+type: python
+updated_at: '2023-04-05 00:47:37'
+uuid: green_pine
+widgets: []
