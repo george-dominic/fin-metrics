@@ -3,48 +3,77 @@ blocks:
   color: null
   configuration: {}
   downstream_blocks:
-  - data_cleaned
+  - remove_duplicates
   executor_config: null
   executor_type: local_python
   has_callback: false
   language: python
-  name: load_bq
+  name: text_load
   status: executed
   type: data_loader
   upstream_blocks: []
-  uuid: load_bq
+  uuid: text_load
 - all_upstream_blocks_executed: true
   color: null
   configuration: {}
   downstream_blocks:
-  - feature_engg
-  - export_bq
+  - add_sector
   executor_config: null
   executor_type: local_python
   has_callback: false
   language: python
-  name: data_cleaned
-  status: updated
+  name: remove_duplicates
+  status: executed
   type: transformer
   upstream_blocks:
-  - load_bq
-  uuid: data_cleaned
-- all_upstream_blocks_executed: false
+  - text_load
+  uuid: remove_duplicates
+- all_upstream_blocks_executed: true
   color: null
   configuration: {}
   downstream_blocks:
-  - export_bq_2
+  - text_cleaning
   executor_config: null
   executor_type: local_python
   has_callback: false
   language: python
-  name: feature_engg
+  name: add_sector
   status: updated
   type: transformer
   upstream_blocks:
-  - data_cleaned
-  uuid: feature_engg
-- all_upstream_blocks_executed: false
+  - remove_duplicates
+  uuid: add_sector
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks:
+  - text_analyze
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: text_cleaning
+  status: executed
+  type: transformer
+  upstream_blocks:
+  - add_sector
+  uuid: text_cleaning
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks:
+  - text_export
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: text analyze
+  status: executed
+  type: transformer
+  upstream_blocks:
+  - text_cleaning
+  uuid: text_analyze
+- all_upstream_blocks_executed: true
   color: null
   configuration: {}
   downstream_blocks: []
@@ -52,31 +81,17 @@ blocks:
   executor_type: local_python
   has_callback: false
   language: python
-  name: export_bq_2
+  name: text_export
   status: executed
   type: data_exporter
   upstream_blocks:
-  - feature_engg
-  uuid: export_bq_2
-- all_upstream_blocks_executed: false
-  color: null
-  configuration: {}
-  downstream_blocks: []
-  executor_config: null
-  executor_type: local_python
-  has_callback: false
-  language: python
-  name: export_bq
-  status: executed
-  type: data_exporter
-  upstream_blocks:
-  - data_cleaned
-  uuid: export_bq
+  - text_analyze
+  uuid: text_export
 data_integration: null
 description: null
 extensions: {}
-name: green pine
+name: throbbing cloud
 type: python
-updated_at: '2023-04-14 17:44:10'
-uuid: green_pine
+updated_at: '2023-04-14 19:18:18'
+uuid: throbbing_cloud
 widgets: []
