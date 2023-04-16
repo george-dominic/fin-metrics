@@ -23,19 +23,21 @@ def compute_sentiment_scores(text):
 @transformer
 def transform(df, *args, **kwargs):
     """
-    Template code for a transformer block.
+      Transforms the input data frame by adding sentiment scores columns to the 'headline' and 'summary' columns.
 
-    Add more parameters to this function if this block has multiple parent blocks.
-    There should be one parameter for each output variable from each parent block.
+      This function applies the 'compute_sentiment_scores' function to the 'headline' and 'summary' columns of
+      the input data frame, calculating sentiment scores for each text using a sentiment analysis algorithm.
+      The resulting sentiment scores are added as new columns to the input data frame, named 'headline_sentiment_score'
+      and 'summary_sentiment_score' respectively.
 
-    Args:
-        args: The input variables from upstream blocks
+      Args:
+          df (pd.DataFrame): The input data frame from upstream blocks
+          *args: Additional arguments, if any
+          **kwargs: Additional keyword arguments, if any
 
-    Returns:
-        Anything (e.g. data frame, dictionary, array, int, str, etc.)
+      Returns:
+          pd.DataFrame: Transformed data frame with added sentiment score columns
     """
-    # Specify your transformation logic here
-
 
     df['headline_sentiment_score'] = df['headline'].apply(compute_sentiment_scores)
     df['summary_sentiment_score'] = df['summary'].apply(compute_sentiment_scores)

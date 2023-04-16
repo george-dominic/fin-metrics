@@ -38,7 +38,7 @@ blocks:
   has_callback: false
   language: python
   name: add_sector
-  status: executed
+  status: updated
   type: transformer
   upstream_blocks:
   - remove_duplicates
@@ -61,22 +61,37 @@ blocks:
 - all_upstream_blocks_executed: true
   color: null
   configuration: {}
-  downstream_blocks: []
+  downstream_blocks:
+  - text_export
   executor_config: null
   executor_type: local_python
   has_callback: false
   language: python
   name: text analyze
-  status: updated
+  status: executed
   type: transformer
   upstream_blocks:
   - text_cleaning
   uuid: text_analyze
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: text_export
+  status: executed
+  type: data_exporter
+  upstream_blocks:
+  - text_analyze
+  uuid: text_export
 data_integration: null
 description: null
 extensions: {}
 name: throbbing cloud
 type: python
-updated_at: '2023-04-14 18:41:36'
+updated_at: '2023-04-14 19:18:18'
 uuid: throbbing_cloud
 widgets: []
