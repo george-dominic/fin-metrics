@@ -10,16 +10,16 @@ import os
 
 def handle_k_m(df: pd.DataFrame) -> pd.DataFrame:
     """
-    This function takes a DataFrame as input and processes any string values in the DataFrame that end with "K" or "M" to 
-    convert them to floats. It then returns a new DataFrame with the processed values, where each column of the new 
-    DataFrame corresponds to a column of the original DataFrame and has had its string values converted to floats where 
+    This function takes a DataFrame as input and processes any string values in the DataFrame that end with "K" or "M" to
+    convert them to floats. It then returns a new DataFrame with the processed values, where each column of the new
+    DataFrame corresponds to a column of the original DataFrame and has had its string values converted to floats where
     appropriate.
-    
+
     Args:
         df: A pandas DataFrame containing columns with string values that may need to be converted to floats.
-    
+
     Returns:
-        A new pandas DataFrame with the same columns as the input DataFrame, but with any string values that end with "K" 
+        A new pandas DataFrame with the same columns as the input DataFrame, but with any string values that end with "K"
         or "M" converted to floats where appropriate.
     """
     ticker_drop = df.drop("Ticker",axis = 1)
@@ -45,7 +45,7 @@ def remove_col(df: pd.DataFrame) -> pd.DataFrame:
 
     Args:
         df: A pandas DataFrame containing data to be transformed.
-    
+
     Returns:
         A new pandas DataFrame containing the transformed data.
 
@@ -57,35 +57,37 @@ def remove_col(df: pd.DataFrame) -> pd.DataFrame:
 
 def handle_skew(df: pd.DataFrame) -> pd.DataFrame:
     """
-    This function takes a DataFrame as input and applies a Yeo-Johnson power transform to the data to reduce skewness. 
+    This function takes a DataFrame as input and applies a Yeo-Johnson power transform to the data to reduce skewness.
     It then returns a new DataFrame containing the transformed data.
-    
+
     Args:
         df: A pandas DataFrame containing data to be transformed.
-    
+
     Returns:
         A new pandas DataFrame containing the transformed data.
     """
-    
+
     # Define the PowerTransformer with the Yeo-Johnson method
     pt = PowerTransformer(method='yeo-johnson')
 
     # Fit and transform the data using the PowerTransformer
-    data_transformed = pt.fit_transform(df)
+    data_transformed = pt.fit_transform(df.iloc[:,:-1])
 
-    # Convert the transformed data to a new DataFrame
-    return pd.DataFrame(data_transformed, columns=df.columns)
+    # Create a new DataFrame with the transformed data
+    df_transformed = pd.DataFrame(data_transformed, columns=df.columns[:-1])
+
+    return pd.concat([df_transformed, df[df.columns[-1]]], axis=1)
 
 
 def standardize_data(df: pd.DataFrame) -> pd.DataFrame:
     """
-    This function takes a pandas DataFrame as input and standardizes all features except the last column using the 
-    StandardScaler from scikit-learn. It then returns a new DataFrame containing the standardized data with the last 
+    This function takes a pandas DataFrame as input and standardizes all features except the last column using the
+    StandardScaler from scikit-learn. It then returns a new DataFrame containing the standardized data with the last
     column included.
-    
+
     Args:
         df: A pandas DataFrame containing the data to be standardized.
-    
+
     Returns:
         A new pandas DataFrame containing the standardized data with the last column included.
     """
@@ -104,13 +106,13 @@ def standardize_data(df: pd.DataFrame) -> pd.DataFrame:
 def handle_outliers(df: pd.DataFrame) -> pd.DataFrame:
     """
     This function takes a pandas DataFrame as input and applies Winsorization to the data to handle outliers.
-    Specifically, it replaces all data points below the 5th percentile with the value at the 5th percentile and 
-    all data points above the 95th percentile with the value at the 95th percentile. The function then returns a 
+    Specifically, it replaces all data points below the 5th percentile with the value at the 5th percentile and
+    all data points above the 95th percentile with the value at the 95th percentile. The function then returns a
     new DataFrame containing the Winsorized data with the last column included.
-    
+
     Args:
         df: A pandas DataFrame containing the data to be Winsorized.
-    
+
     Returns:
         A new pandas DataFrame containing the Winsorized data with the last column included.
     """
@@ -153,10 +155,10 @@ def add_sectors(df:pd.DataFrame, df_raw:pd.DataFrame) -> pd.DataFrame:
 def transform(df: pd.DataFrame, *args, **kwargs) -> pd.DataFrame:
     """
     This function takes a pandas DataFrame as input and applies a series of preprocessing steps to the data.
-    
+
     Args:
         df: A pandas DataFrame containing the data to be preprocessed.
-    
+
     Returns:
         A new pandas DataFrame containing the preprocessed data.
     """

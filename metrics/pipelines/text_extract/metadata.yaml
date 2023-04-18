@@ -30,8 +30,8 @@ blocks:
 data_integration: null
 description: null
 extensions: {}
-name: late sunset
+name: text_extract
 type: python
 updated_at: '2023-04-12 20:09:17'
-uuid: late_sunset
+uuid: text_extract
 widgets: []

@@ -43,7 +43,7 @@ blocks:
   upstream_blocks:
   - remove_duplicates
   uuid: add_sector
-- all_upstream_blocks_executed: true
+- all_upstream_blocks_executed: false
   color: null
   configuration: {}
   downstream_blocks:
@@ -58,7 +58,7 @@ blocks:
   upstream_blocks:
   - add_sector
   uuid: text_cleaning
-- all_upstream_blocks_executed: true
+- all_upstream_blocks_executed: false
   color: null
   configuration: {}
   downstream_blocks:
@@ -73,7 +73,7 @@ blocks:
   upstream_blocks:
   - text_cleaning
   uuid: text_analyze
-- all_upstream_blocks_executed: true
+- all_upstream_blocks_executed: false
   color: null
   configuration: {}
   downstream_blocks: []
@@ -90,8 +90,8 @@ blocks:
 data_integration: null
 description: null
 extensions: {}
-name: throbbing cloud
+name: text_processing
 type: python
 updated_at: '2023-04-14 19:18:18'
-uuid: throbbing_cloud
+uuid: text_processing
 widgets: []
