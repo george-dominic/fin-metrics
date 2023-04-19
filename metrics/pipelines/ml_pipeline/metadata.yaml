@@ -3,7 +3,7 @@ blocks:
   color: null
   configuration: {}
   downstream_blocks:
-  - still_brook
+  - trained_model
   executor_config: null
   executor_type: local_python
   has_callback: false
@@ -13,32 +13,47 @@ blocks:
   type: data_loader
   upstream_blocks: []
   uuid: original_data
-- all_upstream_blocks_executed: false
+- all_upstream_blocks_executed: true
   color: grey
+  configuration: {}
+  downstream_blocks:
+  - pred_export
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: trained_model
+  status: updated
+  type: custom
+  upstream_blocks:
+  - original_data
+  - test_data
+  uuid: trained_model
+- all_upstream_blocks_executed: false
+  color: null
   configuration: {}
   downstream_blocks: []
   executor_config: null
   executor_type: local_python
   has_callback: false
   language: python
-  name: still brook
-  status: updated
-  type: custom
+  name: pred_export
+  status: executed
+  type: data_exporter
   upstream_blocks:
-  - original_data
-  - test_data
-  uuid: still_brook
+  - trained_model
+  uuid: pred_export
 - all_upstream_blocks_executed: true
   color: null
   configuration: {}
   downstream_blocks:
-  - still_brook
+  - trained_model
   executor_config: null
   executor_type: local_python
   has_callback: false
   language: python
   name: test_data
-  status: updated
+  status: executed
   type: data_loader
   upstream_blocks: []
   uuid: test_data
@@ -47,6 +62,6 @@ description: null
 extensions: {}
 name: ml_pipeline
 type: python
-updated_at: '2023-04-19 12:43:53'
+updated_at: '2023-04-19 22:48:07'
 uuid: ml_pipeline
 widgets: []
