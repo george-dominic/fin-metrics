@@ -5,9 +5,6 @@ if 'test' not in globals():
 from sklearn.preprocessing import LabelEncoder
 import pandas as pd
 from sklearn.preprocessing import PolynomialFeatures
-from sklearn.feature_selection import SelectKBest, f_regression
-import xgboost as xgb
-from sklearn.ensemble import RandomForestRegressor
 
 
 def target_encoding(df: pd.DataFrame, column, target) -> pd.DataFrame:
@@ -149,96 +146,6 @@ def call_poly(df: pd.DataFrame) -> pd.DataFrame:
 
     return poly_df
 
-
-def select_features_rf(df, target_column, n_features):
-    """
-    Selects the best features using a Random Forest classifier.
-
-    Args:
-        X (pd.DataFrame): The input features.
-        y (pd.Series): The target variable.
-        n_features (int): The number of features to select.
-
-    Returns:
-        pd.DataFrame: The selected features.
-    """
-
-    X = df.drop(target_column, axis=1)
-    y = df[target_column]
-
-    # Fit a Random Forest classifier
-    rf = RandomForestRegressor(random_state=42)
-    rf.fit(X, y)
-
-    # Get feature importances and sort them in descending order
-    feature_importances = pd.Series(rf.feature_importances_, index=X.columns)
-    feature_importances = feature_importances.sort_values(ascending=False)
-
-    # Select the top n_features features
-    selected_features = feature_importances[:n_features].index.tolist()
-
-    return X[selected_features]
-
-
-def select_k_best_features(df, target_column, k):
-    """
-    Selects the top k features from the input DataFrame using the SelectKBest method from Scikit-learn.
-
-    Args:
-    df (pandas.DataFrame): The input DataFrame containing the features and target column.
-    target_column (str): The name of the target column.
-    k (int): The number of top features to select.
-
-    Returns:
-    list of str: A list of the top k feature names.
-    """
-
-    # Split the DataFrame into features and target
-    X = df.drop(target_column, axis=1)
-    y = df[target_column]
-
-    # Use SelectKBest to select the top k features based on the F-regression score
-    selector = SelectKBest(score_func=f_regression, k=k)
-    selector.fit(X, y)
-    mask = selector.get_support()
-
-    # Get the names of the top k features
-    top_k_features = list(X.columns[mask])
-
-    return top_k_features
-
-
-def xgboost_feature_selection(df, target_col, num_features):
-    """
-    Performs feature selection using XGBoost's built-in feature importance metric.
-
-    Args:
-    df (pandas.DataFrame): The input DataFrame containing the features and target variable.
-    target_col (str): The name of the target variable column.
-    num_features (int): The number of top features to select.
-
-    Returns:
-    list of str: A list of column names of the most important features.
-    """
-
-    # Split the data into X and y
-    X = df.drop(columns=[target_col])
-    y = df[target_col]
-
-    # Train an XGBoost model to determine feature importance
-    dtrain = xgb.DMatrix(X, label=y)
-    params = {'objective': 'reg:squarederror'}
-    model = xgb.train(params, dtrain)
-
-    # Extract the feature importance scores
-    importance_scores = model.get_score(importance_type='gain')
-    feature_importance = sorted(importance_scores.items(), key=lambda x: x[1], reverse=True)
-
-    # Extract the names of the most important features
-    important_features = [x[0] for x in feature_importance[:num_features]]
-
-    return important_features
-
 def rename_columns(df: pd.DataFrame) -> pd.DataFrame:
     """
     Rename the columns of a pandas DataFrame according to a given dictionary of column names.
@@ -265,13 +172,13 @@ def rename_columns(df: pd.DataFrame) -> pd.DataFrame:
     # Return the updated DataFrame
     return df
 
-def store_columns(df):
-    # open a text file for writing
-    with open('columns.txt', 'w') as f:
-        # write each column name to the file
-        for col in df.columns:
-            f.write(col + '\n')
-
+def retrieve_columns():
+    # open the text file containing column names
+    with open('columns.txt', 'r') as f:
+    # read the column names from the file and create a list
+        columns = f.read().splitlines()
+        return columns
+    
 @transformer
 def transform(df: pd.DataFrame, *args, **kwargs) -> pd.DataFrame:
     """
@@ -300,23 +207,20 @@ def transform(df: pd.DataFrame, *args, **kwargs) -> pd.DataFrame:
     df_fin_metric = pd.concat([new_poly_features, data_encoded['Stock_Percent_Change']], axis=1)
 
     # Select top features using different methods and store them in separate lists
-    rf_features = select_features_rf(df_fin_metric, 'Stock_Percent_Change', 40)
-    sklearn_feature = select_k_best_features(df_fin_metric, 'Stock_Percent_Change', k=40)
-    xgboost_feature = xgboost_feature_selection(df_fin_metric, 'Stock_Percent_Change', 40)
+    # rf_features = select_features_rf(df_fin_metric, 'Stock_Percent_Change', 40)
+    # sklearn_feature = select_k_best_features(df_fin_metric, 'Stock_Percent_Change', k=40)
+    # xgboost_feature = xgboost_feature_selection(df_fin_metric, 'Stock_Percent_Change', 40)
 
-    # Get the common features selected by all three methods and append 'Stock_Percent_Change'
-    top_features = list(set(rf_features) & set(sklearn_feature) & set(xgboost_feature))
-    top_features.append('Stock_Percent_Change')
+    # # Get the common features selected by all three methods and append 'Stock_Percent_Change'
+    # top_features = list(set(rf_features) & set(sklearn_feature) & set(xgboost_feature))
+    # top_features.append('Stock_Percent_Change')
 
     # Create the final DataFrame using only the top selected features
+    top_features = retrieve_columns()
     df_fin_metric_final = df_fin_metric[top_features]
-
-    store_columns(df_fin_metric_final)
 
     #renaming columns to comply with big query column name conventions
     df_fin_metric_final = rename_columns(df_fin_metric_final)
-
-    
 
     return df_fin_metric_final
 

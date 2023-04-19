@@ -8,12 +8,12 @@ blocks:
   executor_type: local_python
   has_callback: false
   language: python
-  name: lively thunder
+  name: original_data
   status: executed
   type: data_loader
   upstream_blocks: []
-  uuid: lively_thunder
-- all_upstream_blocks_executed: true
+  uuid: original_data
+- all_upstream_blocks_executed: false
   color: grey
   configuration: {}
   downstream_blocks: []
@@ -22,16 +22,31 @@ blocks:
   has_callback: false
   language: python
   name: still brook
-  status: executed
+  status: updated
   type: custom
   upstream_blocks:
-  - lively_thunder
+  - original_data
+  - test_data
   uuid: still_brook
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks:
+  - still_brook
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: test_data
+  status: updated
+  type: data_loader
+  upstream_blocks: []
+  uuid: test_data
 data_integration: null
 description: null
 extensions: {}
 name: ml_pipeline
 type: python
-updated_at: '2023-04-18 19:45:23'
+updated_at: '2023-04-19 12:43:53'
 uuid: ml_pipeline
 widgets: []

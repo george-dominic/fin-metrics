@@ -14,13 +14,13 @@ def ml_model(df):
 
 
 @custom
-def ml_output(df):
+def ml_output(data, test_data):
     """
     Returns:
         Anything (e.g. data frame, dictionary, array, int, str, etc.)
     """
     
-    leaderboard = ml_model(df)
+    leaderboard = ml_model(data)
 
     print(leaderboard)
 
