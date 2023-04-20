@@ -6,3 +6,4 @@ numpy
 lightgbm
 scikit-learn
 xgboost
+h2o

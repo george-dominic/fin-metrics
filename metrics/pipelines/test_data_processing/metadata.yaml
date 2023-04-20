@@ -1,0 +1,69 @@
+blocks:
+- all_upstream_blocks_executed: true
+  color: null
+  configuration:
+    file_path: null
+  downstream_blocks:
+  - data_cleaned
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: misty_sun
+  status: executed
+  type: data_loader
+  upstream_blocks: []
+  uuid: misty_sun
+- all_upstream_blocks_executed: true
+  color: null
+  configuration:
+    file_path: null
+  downstream_blocks:
+  - test_feat_engg
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: data_cleaned
+  status: executed
+  type: transformer
+  upstream_blocks:
+  - misty_sun
+  uuid: data_cleaned
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks:
+  - lively_snowflake
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: test_feat_engg
+  status: updated
+  type: transformer
+  upstream_blocks:
+  - data_cleaned
+  uuid: test_feat_engg
+- all_upstream_blocks_executed: false
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: lively snowflake
+  status: executed
+  type: data_exporter
+  upstream_blocks:
+  - test_feat_engg
+  uuid: lively_snowflake
+data_integration: null
+description: null
+extensions: {}
+name: test_data_processing
+type: python
+updated_at: '2023-04-19 12:48:50'
+uuid: test_data_processing
+widgets: []

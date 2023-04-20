@@ -31,10 +31,12 @@ blocks:
   - financial_metric_load
   uuid: export_to_big_query
 data_integration: null
+description: null
 extensions: {}
-name: wispy river
+name: metric_extract
 type: python
-uuid: wispy_river
+updated_at: null
+uuid: metric_extract
 widgets:
 - all_upstream_blocks_executed: false
   color: null
