@@ -3,16 +3,16 @@ blocks:
   color: null
   configuration: {}
   downstream_blocks:
-  - autumn_river
+  - test_data_export
   executor_config: null
   executor_type: local_python
   has_callback: false
   language: python
-  name: morning sun
+  name: test_data_extract
   status: updated
   type: data_loader
   upstream_blocks: []
-  uuid: morning_sun
+  uuid: test_data_extract
 - all_upstream_blocks_executed: false
   color: null
   configuration: {}
@@ -21,17 +21,17 @@ blocks:
   executor_type: local_python
   has_callback: false
   language: python
-  name: autumn river
+  name: test_data_export
   status: executed
   type: data_exporter
   upstream_blocks:
-  - morning_sun
-  uuid: autumn_river
+  - test_data_extract
+  uuid: test_data_export
 data_integration: null
 description: null
 extensions: {}
 name: test_data_extraction
 type: python
-updated_at: '2023-04-19 12:46:11'
+updated_at: '2023-04-20 20:06:32'
 uuid: test_data_extraction
 widgets: []
