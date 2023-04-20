@@ -9,11 +9,11 @@ blocks:
   executor_type: local_python
   has_callback: false
   language: python
-  name: misty_sun
+  name: test_data_load
   status: executed
   type: data_loader
   upstream_blocks: []
-  uuid: misty_sun
+  uuid: test_data_load
 - all_upstream_blocks_executed: true
   color: null
   configuration:
@@ -28,13 +28,13 @@ blocks:
   status: executed
   type: transformer
   upstream_blocks:
-  - misty_sun
+  - test_data_load
   uuid: data_cleaned
 - all_upstream_blocks_executed: true
   color: null
   configuration: {}
   downstream_blocks:
-  - lively_snowflake
+  - test_data_transform
   executor_config: null
   executor_type: local_python
   has_callback: false
@@ -53,17 +53,17 @@ blocks:
   executor_type: local_python
   has_callback: false
   language: python
-  name: lively snowflake
+  name: test_data_transform
   status: executed
   type: data_exporter
   upstream_blocks:
   - test_feat_engg
-  uuid: lively_snowflake
+  uuid: test_data_transform
 data_integration: null
 description: null
 extensions: {}
 name: test_data_processing
 type: python
-updated_at: '2023-04-19 12:48:50'
+updated_at: '2023-04-20 20:07:19'
 uuid: test_data_processing
 widgets: []
