@@ -92,3 +92,7 @@ git push origin your-branch-name
 
 ## Contact
 If you have any questions, suggestions or feedback, feel free to [hit me up](https://georgedominic.com/hmu) 
+
+---
+
+Thanks you! 😄
