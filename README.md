@@ -19,7 +19,7 @@ Machine learning model to understand the relationship between Stock Percent Chan
 
 ## Tech Stack
 - Python
-- Mage Pipeline
+- Mage
 - OpenBB
 - GCP BigQuery
 - H2O AutoML
@@ -46,7 +46,7 @@ Machine learning model to understand the relationship between Stock Percent Chan
 
 - **Virtual Environment (optional)**: It is recommended to set up a virtual environment for your Python project. Virtual environments allow you to isolate project dependencies and avoid conflicts between different projects. You can create a virtual environment using tools like venv, virtualenv, or conda.
 
-- **Data Pipelines**: Some knowledge of Data Engineering and Data Pipelining concepts. On top of that, familarity with Mage Data Pipelines would be beneficial
+- **Data Pipelines**: Some knowledge of Data Engineering and Data Pipelining concepts. On top of that, familarity with Mage Data would be beneficial
 
 
 ## Installation
@@ -69,7 +69,9 @@ pip install -r requirements.txt
 mage start metrics
 ```
 This will open up Mage UI on your local browser : https://localhost:6789
+
 2. Click on pipelines on the left tab to view all the pipelines
+
 3. Inside pipelines you can view actions performed within each block of the pipeline
 
 ## Project Report
